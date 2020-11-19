@@ -7,26 +7,19 @@ import datetime
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+import argparse
 
 datetime = datetime.datetime.now()
 driver = webdriver.Chrome(ChromeDriverManager().install())
 driver.maximize_window()
 driver.get("https://cejira.sandisk.com/")
 actions = ActionChains(driver)
-usernameVar = "1000263273"
-passwordVar = "wfjGm45ra"
-summaryVar = "[Model][EEIV2]"
-assigneeVar = "Eran Roth" # Eran Roth # Idan Sarid
-issueFoundByVar = "Validation-GB" #
-foundInVar = "External Integration" # Formal Qual
-componentVar = "FW" # FW #Model #Validation
-summaries = ["NAD: FATAL: Write to unerased sector containing 'unknown ID=0x10' in "
-             "NandArrayData::UpdateMappingTables 'unknown ID=0x10' -> phys (hex) Die_0_0_2 Plane 0, "
-             "Block 0, Wl 2f, St 0, Col 0, SLC(sector in page:0) File: NandArrayData.cpp Line: 417"]
 item = "SWIFTPRO-16994"
 target_url = "https://cejira.sandisk.com/projects/SWIFTPRO/issues"
 search_query = "project = SWIFTPRO AND issuetype = Bug AND status != " \
                "Closed AND assignee in (currentUser()) order by updated DESC"
+usernameVar = None
+passwordVar = None
 
 
 def selector(element, text):
@@ -48,7 +41,9 @@ def click_element_by_id(element=""):
     element.click()
 
 
-def my_open_issues(target_url=None, search_query=None ):
+def my_open_issues(usernameVar="1000263273", passwordVar="wfjGm45ra",
+                   target_url="https://cejira.sandisk.com/projects/SWIFTPRO/issues",
+                   search_query=None ):
     """
     this function enters jira and brings us to the target url
     with the specified search query
@@ -90,5 +85,15 @@ def my_open_issues(target_url=None, search_query=None ):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser('Find my open issues')
+    parser.add_argument("-u", "--user", type=str, help="login user")
+    parser.add_argument("-p", "--password", type=str, help="login password")
+    parser.add_argument("-tu", "--url", type=str, help="the target url")
+    args = parser.parse_args()
+
+    # Store the arguments values
+    user = usernameVar if usernameVar is not None else args.user
+    password = usernameVar if usernameVar is not None else args.password
+    target_url = target_url if target_url is not None else args.url
     my_open_issues(target_url=target_url, search_query=search_query)
 
