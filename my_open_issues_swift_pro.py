@@ -14,10 +14,9 @@ driver = webdriver.Chrome(ChromeDriverManager().install())
 driver.maximize_window()
 driver.get("https://cejira.sandisk.com/")
 actions = ActionChains(driver)
-item = "SWIFTPRO-16994"
-target_url = "https://cejira.sandisk.com/projects/SWIFTPRO/issues"
-search_query = "project = SWIFTPRO AND issuetype = Bug AND status != " \
-               "Closed AND assignee in (currentUser()) order by updated DESC"
+TARGET_URL = "https://cejira.sandisk.com/projects/SWIFTPRO/issues"
+SEARCH_URL = "project = SWIFTPRO AND issuetype = Bug AND status != " \
+             "Closed AND assignee in (currentUser()) order by updated DESC"
 usernameVar = None
 passwordVar = None
 
@@ -42,8 +41,7 @@ def click_element_by_id(element=""):
 
 
 def my_open_issues(usernameVar="1000263273", passwordVar="wfjGm45ra",
-                   target_url="https://cejira.sandisk.com/projects/SWIFTPRO/issues",
-                   search_query=None ):
+                   target_url=TARGET_URL, search_query=SEARCH_URL):
     """
     this function enters jira and brings us to the target url
     with the specified search query
@@ -94,6 +92,6 @@ if __name__ == '__main__':
     # Store the arguments values
     user = usernameVar if usernameVar is not None else args.user
     password = usernameVar if usernameVar is not None else args.password
-    target_url = target_url if target_url is not None else args.url
-    my_open_issues(target_url=target_url, search_query=search_query)
+    target_url = TARGET_URL if TARGET_URL is not None else args.url
+    my_open_issues(target_url=TARGET_URL, search_query=SEARCH_URL)
 
