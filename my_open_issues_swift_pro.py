@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+# Copyright (C) 2015 SanDisk Corporation
+# -*- coding: utf-8 -*-
+# Author: Idan Sarid
+# Date: Dec 2020
+
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
@@ -23,7 +30,7 @@ passwordVar = None
 
 def selector(element, text):
     """
-    selects an item on the page
+    selects an item on the page by element and visible text
     :param element:
     :param text:
     :return:
@@ -35,12 +42,15 @@ def selector(element, text):
 
 
 def click_element_by_id(element=""):
+    """
+    locates element on html dom and clicks
+    """
     element = driver.find_element_by_id(element)
     actions.move_to_element(element)
     element.click()
 
 
-def my_open_issues(usernameVar="1000263273", passwordVar="wfjGm45ra",
+def my_open_issues(usernameVar="", passwordVar="",
                    target_url=TARGET_URL, search_query=SEARCH_URL):
     """
     this function enters jira and brings us to the target url
@@ -70,14 +80,16 @@ def my_open_issues(usernameVar="1000263273", passwordVar="wfjGm45ra",
         element1 = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "mode-switcher")))
         click_element_by_id(element="mode-switcher")
-        element1 = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.ID, "advanced-search")))
+        # element1 = WebDriverWait(driver, 10).until(
+        #     EC.presence_of_element_located((By.ID, "advanced-search")))
+        advanced_search = driver.find_element_by_id("advanced-search")
         advanced_search = driver.find_element_by_id("advanced-search")
         actions.move_to_element(advanced_search)
         advanced_search.clear()
+        advanced_search.clear()
         advanced_search.send_keys(search_query)
     except NoSuchElementException as e:
-        raise e.msg
+        raise e
     except Exception as e:
         raise e
 
@@ -93,5 +105,4 @@ if __name__ == '__main__':
     user = usernameVar if usernameVar is not None else args.user
     password = usernameVar if usernameVar is not None else args.password
     target_url = TARGET_URL if TARGET_URL is not None else args.url
-    my_open_issues(target_url=TARGET_URL, search_query=SEARCH_URL)
-
+    my_open_issues(target_url=TARGET_URL, search_query=SEARCH_URL, usernameVar=user, passwordVar=password)
