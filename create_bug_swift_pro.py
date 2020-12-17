@@ -25,7 +25,7 @@ issueFoundByVar = "Validation-GB"
 foundInVar = "External Integration" # Formal Qual
 componentVar = "Validation" # FW # Model # Validation
 severityVar = "S0-Showstopper" #S1-Limited ES Samples #S0-Showstopper
-summaries = ["new bug"]
+summaries = ["_brk() File: cvd_trtmanagement.c Line: 1110"]
 
 datetime = datetime.datetime.now()
 driver = webdriver.Chrome(ChromeDriverManager().install())
@@ -97,9 +97,15 @@ def create_bug(usernameVar="", passwordVar="", target_url=TARGET_URL, assignToMe
                 EC.presence_of_element_located((By.ID, "summary")))
             summary = driver.find_element_by_id("summary")
             actions.move_to_element(summary)
+            summary.clear()
             summary.send_keys(summaryVar + headline)
             ############# IDB-Program #############
-            selector(element="customfield_11448", text="iNAND-SwiftPro")
+            element4 = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.ID, "customfield_11448")))
+            item = driver.find_element_by_id("customfield_11448")
+            actions.move_to_element(item)
+            select = Select(item)
+            select.select_by_value("67610")
             #######################################
             element4 = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.ID, "customfield_11365")))
@@ -110,10 +116,7 @@ def create_bug(usernameVar="", passwordVar="", target_url=TARGET_URL, assignToMe
             priority.clear()
             priority.send_keys("P1 - High")
             #######################################
-            component = driver.find_element_by_id("components")
-            actions.move_to_element(component)
-            select = Select(component)
-            select.select_by_visible_text(componentVar)
+            selector(element="components", text=componentVar)
             #######################################
             selector(element="customfield_10563", text="External integrations")
             time.sleep(5)
